@@ -1,52 +1,119 @@
-.app{
-  display: flex;
-  flex-direction: column;
-  border: 1px solid black;
-  border-radius: 5px;
-  width: fit-content;
-  padding:10px;
-  text-align: center;
-  gap:10px;
-  align-items: stretch;
-  width: 800px;
+/* global config */
+:root {
+  --ivorywhite-color: #f0f0f0;
+  --tan-color: #e6e2d3;
+  --yellowgreen-color: #4caf50;
+  --vermillionred-color: #c94c4c;
+  --blue-color: #008cba;
+  --grey-color: #555555;
 }
 
-html{
-  display: flex;
-  justify-content: center;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.form{
-  display: flex;
-  flex-direction: row;
-  gap:10px;
+/* app container */
+.app {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  row-gap: 2rem;
+}
+
+/* form */
+.form {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  gap: 10px;
   margin: 0 auto;
 }
 
-.todo-lists {
+.submit-btn {
+  background-color: var(--blue-color);
+}
+
+.input {
+  height: 2rem;
+}
+.input:focus {
+  outline: none;
+}
+
+/* todo list */
+.todo-lists__container {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  width: 85%;
+  grid-auto-rows: minmax(500px, auto);
 }
 
-.todo-list{
-  padding:0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
+.todo-list__container {
+  border: 1px solid #999999;
+  border-radius: 5px;
+  background-color: var(--ivorywhite-color);
+}
+
+.todo-list__container h3 {
+  margin: 1rem 0.5rem;
+}
+
+.todo-list__container h4 {
+  margin: 1rem 0.5rem;
+}
+
+.todo-list {
+  display: grid;
   list-style-type: none;
-  gap:10px;
-  border: 1px solid black;
-  width: 300px;
 }
 
-.todo-list li{
+.todo-list li {
   display: flex;
-  justify-content: space-between;
+  background-color: var(--tan-color);
+  align-items: center;
+  height: 3rem;
+  margin: 0.5rem;
+  border-radius: 5px;
 }
 
-.todo-list li span{
+.todo-list span {
+  height: 2rem;
+  padding: 5px;
+  margin: 3px;
+  border-radius: 5px;
+}
+
+.todo-list span:focus {
+  outline: none;
+}
+
+.todo-list button,
+.submit-btn {
+  border: none;
+  height: 2rem;
+  width: 3rem;
+  border-radius: 5px;
+  margin: 0 5px;
+  color: white;
+}
+
+.todo-list button[id*="delete"] {
+  background-color: var(--vermillionred-color);
+}
+.todo-list button[id*="edit"] {
+  background-color: var(--blue-color);
+}
+.todo-list button[id*="move"] {
+  background-color: var(--yellowgreen-color);
+}
+
+.todo-list li span {
+}
+
+.todo-list li span {
   flex-grow: 1;
   text-align: center;
 }
-
-

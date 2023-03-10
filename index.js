@@ -1,26 +1,7 @@
-//console.log("hello world")
-
-/* 
-  client side
-    template: static template
-    logic(js): MVC(model, view, controller): used to server side technology, single page application
-        model: prepare/manage data,
-        view: manage view(DOM),
-        controller: business logic, event bindind/handling
-
-  server side
-    json-server
-    CRUD: create(post), read(get), update(put, patch), delete(delete)
-
-
+/* TODO:
+ 1. factor out common code in event listeners for better code reuse and maintainability
+ 2. move the green button under completed taks to the left to match with the design
 */
-
-//read
-/* fetch("http://localhost:3000/todos")
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data);
-    }); */
 
 // My implementation of myFetch
 function myFetch(url, options = {}) {
@@ -40,9 +21,8 @@ function myFetch(url, options = {}) {
     xhr.send(options.body);
   });
 }
-myFetch("http://localhost:3000/todos").then((data) => {
-  console.log(data);
-});
+
+// APIs
 const APIs = (() => {
   const createTodo = (newTodo) => {
     return myFetch("http://localhost:3000/todos", {
@@ -72,14 +52,7 @@ const APIs = (() => {
   return { createTodo, updateTodo, deleteTodo, getTodos };
 })();
 
-//IIFE
-//todos
-/* 
-    hashMap: faster to search
-    array: easier to iterate, has order
-
-
-*/
+// model
 const Model = (() => {
   class State {
     #todos; //private field
@@ -111,19 +84,8 @@ const Model = (() => {
     updateTodo,
   };
 })();
-/* 
-    todos = [
-        {
-            id:1,
-            content:"eat lunch"
-        },
-        {
-            id:2,
-            content:"eat breakfast"
-        }
-    ]
 
-*/
+// view
 const View = (() => {
   const todolistpendingEl = document.querySelector(".todo-list--pending");
   const todolistcompletedEl = document.querySelector(".todo-list--completed");
@@ -140,11 +102,11 @@ const View = (() => {
       return todo.completed;
     });
     todospending.forEach((todo) => {
-      const liTemplate = `<li><span id="edit/${todo.id}">${todo.content}</span><button class="delete-btn" id="delete-btn/${todo.id}">delete</button><button class="edit-btn" id="edit-btn/${todo.id}">edit</button><button class="move-btn" id="move-btn/${todo.id}">move</button></li>`;
+      const liTemplate = `<li><span id="edit/${todo.id}">${todo.content}</span><button class="edit-btn" id="edit-btn/${todo.id}">edit</button><button class="delete-btn" id="delete-btn/${todo.id}">delete</button><button class="move-btn" id="move-btn/${todo.id}">move</button></li>`;
       todospendingTemplate += liTemplate;
     });
     todoscompleted.forEach((todo) => {
-      const liTemplate = `<li><span>${todo.content}</span><button class="delete-btn" id="delete-btn/${todo.id}">delete</button><button class="edit-btn" id="edit-btn/${todo.id}">edit</button><button class="move-btn" id="move-btn/${todo.id}">move</button></li>`;
+      const liTemplate = `<li><span>${todo.content}</span><button class="edit-btn" id="edit-btn/${todo.id}">edit</button><button class="delete-btn" id="delete-btn/${todo.id}">delete</button><button class="move-btn" id="move-btn/${todo.id}">move</button></li>`;
       todoscompletedTemplate += liTemplate;
     });
 
@@ -172,6 +134,7 @@ const View = (() => {
   };
 })();
 
+// controller
 const Controller = ((view, model) => {
   const state = new model.State();
   const init = () => {
@@ -183,11 +146,6 @@ const Controller = ((view, model) => {
 
   const handleSubmit = () => {
     view.submitBtnEl.addEventListener("click", (event) => {
-      /* 
-                1. read the value from input
-                2. post request
-                3. update view
-            */
       const inputValue = view.inputEl.value;
       model
         .createTodo({ content: inputValue, completed: false })
@@ -199,13 +157,6 @@ const Controller = ((view, model) => {
   };
 
   const handleDelete = () => {
-    //event bubbling
-    /* 
-            1. get id
-            2. make delete request
-            3. update view, remove
-        */
-
     view.todolistpendingEl.addEventListener("click", (event) => {
       if (event.target.className === "delete-btn") {
         const id = event.target.id.split("/")[1];
@@ -262,9 +213,11 @@ const Controller = ((view, model) => {
         if (spanEl.contentEditable === "true") {
           model.updateTodo(+id, { content: spanEl.innerHTML }).then(() => {
             spanEl.contentEditable = "false";
+            spanEl.style.backgroundColor = "#e6e2d3";
           });
         } else {
           spanEl.contentEditable = "true";
+          spanEl.style.backgroundColor = "white";
         }
       }
     });
@@ -275,9 +228,11 @@ const Controller = ((view, model) => {
         if (spanEl.contentEditable === "true") {
           model.updateTodo(+id, { content: spanEl.innerHTML }).then(() => {
             spanEl.contentEditable = "false";
+            spanEl.style.backgroundColor = "#e6e2d3";
           });
         } else {
           spanEl.contentEditable = "true";
+          spanEl.style.backgroundColor = "white";
         }
       }
     });
@@ -296,6 +251,6 @@ const Controller = ((view, model) => {
   return {
     bootstrap,
   };
-})(View, Model); //ViewModel
+})(View, Model);
 
 Controller.bootstrap();
