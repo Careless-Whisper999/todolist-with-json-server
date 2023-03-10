@@ -110,7 +110,11 @@
   background-color: var(--yellowgreen-color);
 }
 
-.todo-list li span {
+svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  pointer-events: none;
 }
 
 .todo-list li span {
