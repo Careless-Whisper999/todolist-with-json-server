@@ -1,17 +1,17 @@
 {
   "todos": [
     {
-      "content": "hahahaaha",
-      "completed": false,
+      "content": "asdfasdf",
+      "completed": true,
       "id": 1
     },
     {
-      "content": "It is modified, Yayy",
-      "completed": false,
+      "content": "asdfasdf",
+      "completed": true,
       "id": 2
     },
     {
-      "content": "asdfasdf",
+      "content": "I got modified",
       "completed": false,
       "id": 3
     }

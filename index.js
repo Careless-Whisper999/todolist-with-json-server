@@ -22,31 +22,52 @@
         console.log(data);
     }); */
 
+// My implementation of myFetch
+function myFetch(url, options = {}) {
+  return new Promise((res, rej) => {
+    let xhr = new XMLHttpRequest();
+    xhr.open(options.method || "GET", url);
+    xhr.responseType = "json";
+    for (let headerName in options.headers) {
+      xhr.setRequestHeader(headerName, options.headers[headerName]);
+    }
+    xhr.onload = () => {
+      res(xhr.response);
+    };
+    xhr.onerror = () => {
+      rej(new Error("myFetch failed"));
+    };
+    xhr.send(options.body);
+  });
+}
+myFetch("http://localhost:3000/todos").then((data) => {
+  console.log(data);
+});
 const APIs = (() => {
   const createTodo = (newTodo) => {
-    return fetch("http://localhost:3000/todos", {
+    return myFetch("http://localhost:3000/todos", {
       method: "POST",
       body: JSON.stringify(newTodo),
       headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json());
+    });
   };
 
   const updateTodo = (id, newTodo) => {
-    return fetch("http://localhost:3000/todos" + `/${id}`, {
+    return myFetch("http://localhost:3000/todos/" + id, {
       method: "PATCH",
       body: JSON.stringify(newTodo),
       headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json());
+    });
   };
 
   const deleteTodo = (id) => {
-    return fetch("http://localhost:3000/todos/" + id, {
+    return myFetch("http://localhost:3000/todos/" + id, {
       method: "DELETE",
-    }).then((res) => res.json());
+    });
   };
 
   const getTodos = () => {
-    return fetch("http://localhost:3000/todos").then((res) => res.json());
+    return myFetch("http://localhost:3000/todos");
   };
   return { createTodo, updateTodo, deleteTodo, getTodos };
 })();
@@ -235,30 +256,30 @@ const Controller = ((view, model) => {
 
   const handleEdit = () => {
     view.todolistpendingEl.addEventListener("click", (event) => {
-        if (event.target.className === "edit-btn") {
-            const id = event.target.id.split("/")[1];
-            const spanEl = event.target.parentElement.firstChild;
-            if (spanEl.contentEditable === "true") {
-                model.updateTodo(+id, {content: spanEl.innerHTML}).then(() => {
-                    spanEl.contentEditable = "false";
-                });
-            } else {
-                spanEl.contentEditable = "true";
-            }
+      if (event.target.className === "edit-btn") {
+        const id = event.target.id.split("/")[1];
+        const spanEl = event.target.parentElement.firstChild;
+        if (spanEl.contentEditable === "true") {
+          model.updateTodo(+id, { content: spanEl.innerHTML }).then(() => {
+            spanEl.contentEditable = "false";
+          });
+        } else {
+          spanEl.contentEditable = "true";
         }
+      }
     });
     view.todolistcompletedEl.addEventListener("click", (event) => {
-        if (event.target.className === "edit-btn") {
-            const id = event.target.id.split("/")[1];
-            const spanEl = event.target.parentElement.firstChild;
-            if (spanEl.contentEditable === "true") {
-                model.updateTodo(+id, {content: spanEl.innerHTML}).then(() => {
-                    spanEl.contentEditable = "false";
-                });
-            } else {
-                spanEl.contentEditable = "true";
-            }
+      if (event.target.className === "edit-btn") {
+        const id = event.target.id.split("/")[1];
+        const spanEl = event.target.parentElement.firstChild;
+        if (spanEl.contentEditable === "true") {
+          model.updateTodo(+id, { content: spanEl.innerHTML }).then(() => {
+            spanEl.contentEditable = "false";
+          });
+        } else {
+          spanEl.contentEditable = "true";
         }
+      }
     });
   };
 
